@@ -51,19 +51,6 @@ public class HomeActivity extends AppCompatActivity {
         user= FirebaseAuth.getInstance().getCurrentUser();
         reference= FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
 
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                User user=snapshot.getValue(User.class);
-//                Username_string=user.getUsername();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//
-//            }
-//        });
-
         {
             //navigation elements
             NavigationView navigationView = findViewById(R.id.navigation_drawer);
@@ -90,9 +77,26 @@ public class HomeActivity extends AppCompatActivity {
             toggle.syncState();
 
             View headerView = navigationView.getHeaderView(0);
-//            TextView name_nav = headerView.findViewById(R.id.username_nav);
-//
-//            name_nav.setText(Username_string);
+            TextView name_nav = headerView.findViewById(R.id.username_nav);
+            name_nav.setText("USERNAME");
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    User user=snapshot.getValue(User.class);
+                    Username_string=user.getUsername();
+                    Toast.makeText(HomeActivity.this, Username_string, Toast.LENGTH_SHORT).show();
+                    View headerView = navigationView.getHeaderView(0);
+                    TextView name_nav = headerView.findViewById(R.id.username_nav);
+                    name_nav.setText(Username_string);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+
+                }
+            });
+
         }
     }
 }

@@ -1,16 +1,19 @@
 package com.example.chitchat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -73,12 +76,13 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     })
                             .addOnFailureListener(e -> {
-                                Toast.makeText(RegisterActivity.this, "Registration Fail!!", Toast.LENGTH_SHORT).show();
-                                Intent back=new Intent(RegisterActivity.this,StartActivity.class);
-                                startActivity(back);
-                                finish();
                             });
                 })
-                .addOnFailureListener(e -> Toast.makeText(RegisterActivity.this, "Invalid email or password!!!", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 }
