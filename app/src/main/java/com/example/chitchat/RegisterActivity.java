@@ -25,9 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     DatabaseReference reference;
-
-    static SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         register=findViewById(R.id.register);
 
         auth=FirebaseAuth.getInstance();
-
-        sharedPreferences=getSharedPreferences("UserData",MODE_PRIVATE);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,24 +52,20 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("CommitPrefEdits")
     public void setRegister(String username, String email, String password){
         auth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(task -> {
-                    final FirebaseUser firebaseUser=auth.getCurrentUser();
+                    FirebaseUser firebaseUser=auth.getCurrentUser();
                     String userID=firebaseUser.getUid();
                     reference= FirebaseDatabase.getInstance().getReference("USERS").child(userID);
+
                     HashMap<String,String> hashMap=new HashMap<>();
                     hashMap.put("ID",userID);
                     hashMap.put("Username",username);
                     hashMap.put("Images","default");
-                    hashMap.put("Email",email);
 
                     reference.setValue(hashMap).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-
-                            sharedPreferences.edit().putString("Username",username);
-                            sharedPreferences.edit().putString("Email",email);
                             Toast.makeText(RegisterActivity.this, "Registered", Toast.LENGTH_SHORT).show();
                             Intent home=new Intent(RegisterActivity.this,HomeActivity.class);
                             startActivity(home);

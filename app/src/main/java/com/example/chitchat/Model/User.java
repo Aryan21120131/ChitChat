@@ -4,13 +4,11 @@ public class User {
     private String ID;
     private String Username;
     private String Images;
-    private String Email;
 
-    public User(String ID, String Username, String Images,String Email) {
+    public User(String ID, String Username, String Images) {
         this.ID = ID;
         this.Username = Username;
         this.Images = Images;
-        this.Email=Email;
     }
 
     public User() {
@@ -38,13 +36,5 @@ public class User {
 
     public void setImages(String images) {
         Images = images;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
     }
 }

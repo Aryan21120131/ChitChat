@@ -1,5 +1,6 @@
 package com.example.chitchat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,11 +16,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chitchat.Model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -27,6 +32,8 @@ public class HomeActivity extends AppCompatActivity {
 
     FirebaseUser user;
     DatabaseReference reference;
+
+    String Username_string;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -42,7 +49,20 @@ public class HomeActivity extends AppCompatActivity {
         animationDrawable.start();
 
         user= FirebaseAuth.getInstance().getCurrentUser();
-        reference= FirebaseDatabase.getInstance().getReference("USERS");
+        reference= FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
+
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                User user=snapshot.getValue(User.class);
+//                Username_string=user.getUsername();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//
+//            }
+//        });
 
         {
             //navigation elements
@@ -69,12 +89,10 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.addDrawerListener(toggle);
             toggle.syncState();
 
-//            View headerView = navigationView.getHeaderView(0);
+            View headerView = navigationView.getHeaderView(0);
 //            TextView name_nav = headerView.findViewById(R.id.username_nav);
-//            TextView email_nav = headerView.findViewById(R.id.email_nav);
-
-//            email_nav.setText(RegisterActivity.sharedPreferences.getString("Username","USERNAME"));
-//            name_nav.setText(RegisterActivity.sharedPreferences.getString("Email","EMAIL"));
+//
+//            name_nav.setText(Username_string);
         }
     }
 }
